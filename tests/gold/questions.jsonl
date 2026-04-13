@@ -1,0 +1,10 @@
+{"question": "How many customers are in the US?", "expected_sql": "SELECT COUNT(*) FROM customers WHERE country = 'US'"}
+{"question": "What is the total number of orders?", "expected_sql": "SELECT COUNT(*) FROM orders"}
+{"question": "How many products do we have?", "expected_sql": "SELECT COUNT(*) FROM products"}
+{"question": "How many customers do we have per country?", "expected_sql": "SELECT country, COUNT(*) AS n FROM customers GROUP BY country"}
+{"question": "What is the total revenue across all orders?", "expected_sql": "SELECT SUM(oi.line_total) FROM order_items oi"}
+{"question": "Which country has the most customers?", "expected_sql": "SELECT country, COUNT(*) AS n FROM customers GROUP BY country ORDER BY n DESC LIMIT 1"}
+{"question": "Show the 5 customers with the most orders.", "expected_sql": "SELECT c.customer_id, COUNT(o.order_id) AS order_count FROM customers c JOIN orders o ON o.customer_id = c.customer_id GROUP BY c.customer_id ORDER BY order_count DESC LIMIT 5"}
+{"question": "What is the average order value?", "expected_sql": "SELECT AVG(order_total) FROM (SELECT order_id, SUM(line_total) AS order_total FROM order_items GROUP BY order_id) t"}
+{"question": "List all products that cost more than 100.", "expected_sql": "SELECT * FROM products WHERE price > 100"}
+{"question": "How many distinct countries are represented in the customers table?", "expected_sql": "SELECT COUNT(DISTINCT country) FROM customers"}
