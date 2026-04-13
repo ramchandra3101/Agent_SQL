@@ -79,20 +79,23 @@ def _summarize(question: str, columns: list[str], rows: list[dict[str, Any]]) ->
 
     preview = rows[:_MAX_SUMMARY_ROWS]
     llm = get_llm(temperature=0.0, max_tokens=250)
-    response = llm.invoke(
-        [
-            SystemMessage(content=_SYSTEM_PROMPT),
-            HumanMessage(
-                content=(
-                    f"User question: {question}\n\n"
-                    f"Columns: {columns}\n"
-                    f"Rows (up to {_MAX_SUMMARY_ROWS}):\n{preview}\n\n"
-                    f"Write the answer now."
-                )
-            ),
-        ]
-    )
-    return response.content.strip()
+    messages = [
+        SystemMessage(content=_SYSTEM_PROMPT),
+        HumanMessage(
+            content=(
+                f"User question: {question}\n\n"
+                f"Columns: {columns}\n"
+                f"Rows (up to {_MAX_SUMMARY_ROWS}):\n{preview}\n\n"
+                f"Write the answer now."
+            )
+        ),
+    ]
+    # .stream() so LangGraph's "messages" stream mode surfaces token chunks
+    # to the API layer for SSE. The CLI path just joins them back together.
+    parts: list[str] = []
+    for chunk in llm.stream(messages):
+        parts.append(chunk.content or "")
+    return "".join(parts).strip()
 
 
 def format_node(state: AgentState) -> dict[str, Any]:
