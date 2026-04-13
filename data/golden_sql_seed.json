@@ -1,0 +1,44 @@
+[
+  {
+    "question": "How many customers do we have in each country?",
+    "sql": "SELECT country, COUNT(*) AS customer_count FROM customers GROUP BY country ORDER BY customer_count DESC",
+    "dialect": "postgresql",
+    "tables": ["customers"]
+  },
+  {
+    "question": "What is the total revenue per country?",
+    "sql": "SELECT c.country, SUM(oi.line_total) AS revenue FROM customers c JOIN orders o ON o.customer_id = c.customer_id JOIN order_items oi ON oi.order_id = o.order_id GROUP BY c.country ORDER BY revenue DESC",
+    "dialect": "postgresql",
+    "tables": ["customers", "orders", "order_items"]
+  },
+  {
+    "question": "Which 10 products generated the most revenue?",
+    "sql": "SELECT p.name, SUM(oi.line_total) AS revenue FROM products p JOIN order_items oi ON oi.product_id = p.product_id GROUP BY p.name ORDER BY revenue DESC LIMIT 10",
+    "dialect": "postgresql",
+    "tables": ["products", "order_items"]
+  },
+  {
+    "question": "List the top 5 customers by total spend.",
+    "sql": "SELECT c.customer_id, c.name, SUM(oi.line_total) AS total_spend FROM customers c JOIN orders o ON o.customer_id = c.customer_id JOIN order_items oi ON oi.order_id = o.order_id GROUP BY c.customer_id, c.name ORDER BY total_spend DESC LIMIT 5",
+    "dialect": "postgresql",
+    "tables": ["customers", "orders", "order_items"]
+  },
+  {
+    "question": "How many orders were placed each month last year?",
+    "sql": "SELECT DATE_TRUNC('month', order_date) AS month, COUNT(*) AS order_count FROM orders WHERE order_date >= DATE_TRUNC('year', CURRENT_DATE) - INTERVAL '1 year' AND order_date < DATE_TRUNC('year', CURRENT_DATE) GROUP BY month ORDER BY month",
+    "dialect": "postgresql",
+    "tables": ["orders"]
+  },
+  {
+    "question": "Show all orders for customer 1.",
+    "sql": "SELECT * FROM orders WHERE customer_id = 1 ORDER BY order_date DESC",
+    "dialect": "postgresql",
+    "tables": ["orders"]
+  },
+  {
+    "question": "Which products are running low on stock (under 10 units)?",
+    "sql": "SELECT product_id, name, stock_quantity FROM products WHERE stock_quantity < 10 ORDER BY stock_quantity ASC",
+    "dialect": "postgresql",
+    "tables": ["products"]
+  }
+]

@@ -1,0 +1,31 @@
+# --- Orchestration -----------------------------------------------------------
+langgraph>=0.2.40
+langgraph-checkpoint-postgres>=2.0.0
+
+# --- LangChain + OpenAI ------------------------------------------------------
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
+langchain-openai>=0.2.0
+langsmith>=0.1.120
+
+# --- Database (Postgres + pgvector) ------------------------------------------
+SQLAlchemy>=2.0.30
+psycopg[binary]>=3.2.0
+pgvector>=0.3.0
+sqlparse>=0.5.0
+
+# --- Utilities ---------------------------------------------------------------
+pydantic>=2.7.0
+python-dotenv>=1.0.1
+rich>=13.7.0
+typer>=0.12.3
+
+# --- Data / visualization ----------------------------------------------------
+pandas>=2.2.0
+numpy>=1.26.0
+matplotlib>=3.9.0
+plotly>=5.22.0
+
+# --- Tests -------------------------------------------------------------------
+pytest>=8.2.0
